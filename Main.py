@@ -4,6 +4,8 @@ import hashlib
 
 client = discord.Client()
 
+# TODO in a another file (TODO.md)
+
 
 @client.event
 async def on_ready():
