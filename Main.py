@@ -1,8 +1,3 @@
-import base64
-import os
-import uuid
-from math import fmod
-
 import discord
 import asyncio
 import hashlib
