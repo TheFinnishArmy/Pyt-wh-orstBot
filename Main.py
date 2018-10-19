@@ -2,9 +2,9 @@ import discord
 import asyncio
 import hashlib
 import requests
-import json
 
 client = discord.Client()
+
 
 # TODO in a another file (TODO.md)
 
@@ -16,8 +16,8 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-    testGame = discord.Game(name="my creators ramblings", type=2)
-    await client.change_presence(game=testGame)
+    test_game = discord.Game(name="my creators ramblings", type=2)
+    await client.change_presence(game=test_game)
 
 
 @client.event
@@ -43,14 +43,14 @@ async def on_message(message):
             await client.send_message(message.channel, hashlib.sha3_512(b.encode('utf-8')).hexdigest())
 
     elif message.content.startswith('wh!changePresence'):
-        messageString = message.content
+        message_string = message.content
         error = False
         a, b, c = None, None, None
         try:
             try:
-                a, b, c = messageString.split(' ')
+                a, b, c = message_string.split(' ')
             except ValueError:
-                a, b = messageString.split(' ')
+                a, b = message_string.split(' ')
         except ValueError:
             await client.send_message(message.channel, 'Please input string to be used as the game')
             error = True
@@ -58,7 +58,7 @@ async def on_message(message):
         if not error:
             error = False
             try:
-                cInt = int(c)
+                c_int = int(c)
             except ValueError:
                 await client.send_message(message.channel,
                                           'Please enter a int as the second parameter, current entered has been '
@@ -68,12 +68,12 @@ async def on_message(message):
                 error = True
 
             if not error:
-                testGame = discord.Game(name=b, type=cInt)
-                await client.change_presence(game=testGame)
+                test_game = discord.Game(name=b, type=c_int)
+                await client.change_presence(game=test_game)
                 await client.send_message(message.channel, 'Changed to status: {0} \n and game: {1}'.format(c, b))
             else:
-                testGame = discord.Game(name=b)
-                await  client.change_presence(game=testGame)
+                test_game = discord.Game(name=b)
+                await  client.change_presence(game=test_game)
                 await client.send_message(message.channel, 'Changed to game: {}'.format(b))
 
     elif message.content.startswith('wh!wikiFetch'):
@@ -86,39 +86,40 @@ async def on_message(message):
             await client.send_message(message.channel, 'Please input string to be searched as first parameter')
             error = True
         if not error:
-            S = requests.Session()
+            s = requests.Session()
 
-            URL = 'http://overwatch.wikia.com/api.php'
+            url = 'http://overwatch.wikia.com/api.php'
 
-            TITLE = b
+            title = b
 
-            PARAMS = {
+            params = {
                 'action': 'query',
-                'titles': TITLE,
+                'titles': title,
                 'prop': 'revisions',
-                'rvprop':  'content',
+                'rvprop': 'content',
                 'format': 'json'
             }
 
-            R = S.get(url=URL, params=PARAMS)
-            DATA = R.json()
+            r = s.get(url=url, params=params)
+            data = r.json()
 
             error = False
 
             try:
-                filteredData1 = DATA['query']['pages']
-                filteredData2 = filteredData1[next(iter(filteredData1))]['revisions'][0]['*']
-                filteredDataString = str(filteredData2)
+                filtered_data1 = data['query']['pages']
+                filtered_data2 = filtered_data1[next(iter(filtered_data1))]['revisions'][0]['*']
+                filtered_data_string = str(filtered_data2)
             except KeyError:
                 await client.send_message(message.channel, 'Couldn\'t find a wikipage by that name. (All names are '
                                                            'case-sensitive)')
                 error = True
             if not error:
                 try:
-                    a, b = filteredDataString.split('</onlyinclude>')
+                    a, b = filtered_data_string.split('</onlyinclude>')
                 except ValueError:
-                    await client.send_message(message.channel, 'Couldn\'t find a page with an ability description by that '
-                                                           'name. (All names are case-sensitive)')
+                    await client.send_message(message.channel,
+                                              'Couldn\'t find a page with an ability description by that '
+                                              'name. (All names are case-sensitive)')
                     error = True
 
                 if not error:
