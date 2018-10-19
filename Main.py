@@ -1,6 +1,8 @@
 import discord
 import asyncio
 import hashlib
+import requests
+import json
 
 client = discord.Client()
 
@@ -34,21 +36,21 @@ async def on_message(message):
         try:
             a, b = hashable_message.split(' ')
         except ValueError:
-            await client.send_message(message.channel, 'Please input string to be hashed as second parameter')
+            await client.send_message(message.channel, 'Please input string to be hashed as first parameter')
             error = True
         if not error:
             await client.send_message(message.channel, 'SHA3-512 Hash of {}:'.format(b))
             await client.send_message(message.channel, hashlib.sha3_512(b.encode('utf-8')).hexdigest())
 
     elif message.content.startswith('wh!changePresence'):
-        hashable_message = message.content
+        messageString = message.content
         error = False
         a, b, c = None, None, None
         try:
             try:
-                a, b, c = hashable_message.split(' ')
+                a, b, c = messageString.split(' ')
             except ValueError:
-                a, b = hashable_message.split(' ')
+                a, b = messageString.split(' ')
         except ValueError:
             await client.send_message(message.channel, 'Please input string to be used as the game')
             error = True
@@ -59,7 +61,7 @@ async def on_message(message):
                 cInt = int(c)
             except ValueError:
                 await client.send_message(message.channel,
-                                          'Please enter a int as the second argument, current entered has been '
+                                          'Please enter a int as the second parameter, current entered has been '
                                           'discarded as it couldn\'t be converted')
                 error = True
             except TypeError:
@@ -73,6 +75,54 @@ async def on_message(message):
                 testGame = discord.Game(name=b)
                 await  client.change_presence(game=testGame)
                 await client.send_message(message.channel, 'Changed to game: {}'.format(b))
+
+    elif message.content.startswith('wh!wikiFetch'):
+
+        hashable_message = message.content
+        error = False
+        try:
+            a, b = hashable_message.split(' ')
+        except ValueError:
+            await client.send_message(message.channel, 'Please input string to be searched as first parameter')
+            error = True
+        if not error:
+            S = requests.Session()
+
+            URL = 'http://overwatch.wikia.com/api.php'
+
+            TITLE = b
+
+            PARAMS = {
+                'action': 'query',
+                'titles': TITLE,
+                'prop': 'revisions',
+                'rvprop':  'content',
+                'format': 'json'
+            }
+
+            R = S.get(url=URL, params=PARAMS)
+            DATA = R.json()
+
+            error = False
+
+            try:
+                filteredData1 = DATA['query']['pages']
+                filteredData2 = filteredData1[next(iter(filteredData1))]['revisions'][0]['*']
+                filteredDataString = str(filteredData2)
+            except KeyError:
+                await client.send_message(message.channel, 'Couldn\'t find a wikipage by that name. (All names are '
+                                                           'case-sensitive)')
+                error = True
+            if not error:
+                try:
+                    a, b = filteredDataString.split('</onlyinclude>')
+                except ValueError:
+                    await client.send_message(message.channel, 'Couldn\'t find a page with an ability description by that '
+                                                           'name. (All names are case-sensitive)')
+                    error = True
+
+                if not error:
+                    await client.send_message(message.channel, a)
 
     elif message.content.startswith('wh!eval'):
         await client.send_message(message.channel, 'Currently not working, @ my creator if you really want it.')
