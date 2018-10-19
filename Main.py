@@ -22,7 +22,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith('wh!count'):
+    if message.content.lower().startswith('wh!count'):
         counter = 0
         tmp = await client.send_message(message.channel, 'Calculating messages...')
         async for log in client.logs_from(message.channel, limit=100):
@@ -30,7 +30,7 @@ async def on_message(message):
                 counter += 1
         await client.edit_message(tmp, 'You have {} messages.'.format(counter))
 
-    elif message.content.startswith('wh!hash'):
+    elif message.content.lower().startswith('wh!hash'):
         hashable_message = message.content
         error = False
         try:
@@ -42,7 +42,7 @@ async def on_message(message):
             await client.send_message(message.channel, 'SHA3-512 Hash of {}:'.format(b))
             await client.send_message(message.channel, hashlib.sha3_512(b.encode('utf-8')).hexdigest())
 
-    elif message.content.startswith('wh!changePresence'):
+    elif message.content.lower().startswith('wh!changePresence'):
         message_string = message.content
         error = False
         a, b, c = None, None, None
@@ -76,7 +76,7 @@ async def on_message(message):
                 await  client.change_presence(game=test_game)
                 await client.send_message(message.channel, 'Changed to game: {}'.format(b))
 
-    elif message.content.startswith('wh!wikiFetch'):
+    elif message.content.lower().startswith('wh!wikifetch'):
 
         hashable_message = message.content
         error = False
@@ -85,6 +85,7 @@ async def on_message(message):
         except ValueError:
             await client.send_message(message.channel, 'Please input string to be searched as first parameter')
             error = True
+
         if not error:
             s = requests.Session()
 
@@ -116,16 +117,32 @@ async def on_message(message):
             if not error:
                 try:
                     a, b = filtered_data_string.split('</onlyinclude>')
+
+                    a_list = a.split('\n')
+                    a_list.pop(0)
+                    a_list.pop()
+                    a_list.pop()
+
+                    await client.send_message(message.channel, 'Somewhat formatted response:')
+
+                    for item in a_list:
+                        item = item.replace('|', ' ')
+                        item = item.replace('{', '')
+                        item = item.replace('}', '')
+                        item = item.replace('Texttip', '')
+                        if item is not None and item != '':
+                            await client.send_message(message.channel, item)
+                            asyncio.sleep(1)
+
+                    # await client.send_message(message.channel, '{End of formatting} \n \n Raw response:')
+                    # await client.send_message(message.channel, a)
+
                 except ValueError:
                     await client.send_message(message.channel,
                                               'Couldn\'t find a page with an ability description by that '
                                               'name. (All names are case-sensitive)')
-                    error = True
 
-                if not error:
-                    await client.send_message(message.channel, a)
-
-    elif message.content.startswith('wh!eval'):
+    elif message.content.lower().startswith('wh!eval'):
         await client.send_message(message.channel, 'Currently not working, @ my creator if you really want it.')
         '''
         secret = 'TestSecret'
@@ -143,7 +160,7 @@ async def on_message(message):
             await client.send_message(message.channel, 'You sent an invalid hash or you timed out.')
         '''
 
-    elif message.content.startswith('wh!shutdown') or message.content.startswith('wh!stop'):
+    elif message.content.lower().startswith('wh!shutdown') or message.content.startswith('wh!stop'):
         await client.send_message(message.channel, 'Shutting down')
         await client.logout()
 
