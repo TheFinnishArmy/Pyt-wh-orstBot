@@ -8,6 +8,16 @@ client = discord.Client()
 
 # TODO in a another file (TODO.md)
 
+def search_image_name(b_list):
+    for item in b_list:
+        if item.startswith('image'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            return item
+
+    return None
 
 @client.event
 async def on_ready():
@@ -31,10 +41,10 @@ async def on_message(message):
         await client.edit_message(tmp, 'You have {} messages.'.format(counter))
 
     elif message.content.lower().startswith('wh!hash'):
-        hashable_message = message.content
+        messageString = message.content
         error = False
         try:
-            a, b = hashable_message.split(' ')
+            a, b = messageString.split(' ')
         except ValueError:
             await client.send_message(message.channel, 'Please input string to be hashed as first parameter')
             error = True
@@ -76,12 +86,12 @@ async def on_message(message):
                 await  client.change_presence(game=test_game)
                 await client.send_message(message.channel, 'Changed to game: {}'.format(b))
 
-    elif message.content.lower().startswith('wh!wikifetch'):
+    elif message.content.lower().startswith('wh!abilityinfo'):
 
-        hashable_message = message.content
+        messageString = message.content
         error = False
         try:
-            a, b = hashable_message.split(' ')
+            a, b = messageString.split(' ')
         except ValueError:
             await client.send_message(message.channel, 'Please input string to be searched as first parameter')
             error = True
@@ -93,7 +103,7 @@ async def on_message(message):
 
             title = b
 
-            params = {
+            paramsAbility = {
                 'action': 'query',
                 'titles': title,
                 'prop': 'revisions',
@@ -101,7 +111,7 @@ async def on_message(message):
                 'format': 'json'
             }
 
-            r = s.get(url=url, params=params)
+            r = s.get(url=url, params=paramsAbility)
             data = r.json()
 
             error = False
@@ -123,6 +133,8 @@ async def on_message(message):
                     a_list.pop()
                     a_list.pop()
 
+                    b_list = None
+
                     await client.send_message(message.channel, 'Somewhat formatted response:')
 
                     for item in a_list:
@@ -131,11 +143,28 @@ async def on_message(message):
                         item = item.replace('}', '')
                         item = item.replace('Texttip', '')
                         if item is not None and item != '':
-                            await client.send_message(message.channel, item)
-                            asyncio.sleep(1)
+                            b_list.append(item)
 
-                    # await client.send_message(message.channel, '{End of formatting} \n \n Raw response:')
-                    # await client.send_message(message.channel, a)
+                    image_name = search_image_name(b_list)
+
+                    if image_name is not None and image_name is not '':
+                        s = requests.Session()
+
+                        url = 'http://overwatch.wikia.com/api.php'
+
+                        params_image = {
+                            'action': 'query',
+                            'list': 'allimages',
+                            'ailimit': '1',
+                            'aifrom': x,
+                            'aiprop': 'url',
+                            'format': 'json'
+                        }
+
+                        r = s.get(url=url, params=params_image)
+                        image_data = r.json()
+
+                        print(image_data)
 
                 except ValueError:
                     await client.send_message(message.channel,
