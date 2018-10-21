@@ -1,8 +1,7 @@
 **TODO** 
 -
 - Integrate Overwatch wiki (Wikia Api & Discord Embeds)
-    - Got the correct content, now to filter and embed it
-    - Change the command format to "wh!wikiFetch {wiki} {subject}"???
-    - Maybe add support for non case-sensitivity? (Could be hard)
+    - Add filters for supporting abilities
+    - Sometimes doesn't find a page that exists, diagnose.
+    - Implement support for secondary fire modes
 - Donald Trump Tweet Generator
-- Loads of other things.

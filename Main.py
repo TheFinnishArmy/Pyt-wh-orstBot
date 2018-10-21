@@ -15,9 +15,111 @@ def search_image_name(b_list):
                 a, b = item.split('=')
             except ValueError:
                 continue
-            return item
+            return b
 
     return None
+
+
+def build_embed(b_list, image_url):
+    title_string = ''
+    description_string = ''
+
+    for item in b_list:
+        if item.startswith('name'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            title_string += b
+        if item.startswith('description'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            description_string += b
+
+    embed = discord.Embed(title=title_string, description=description_string)
+
+    if image_url is not None and image_url is not '':
+        embed.set_thumbnail(url=image_url)
+
+    for item in b_list:
+        if item.startswith('image'):
+            continue
+        if item.startswith("name"):
+            continue
+        if item.startswith('type'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Weapon type:", value=b)
+
+        if item.startswith('ammo'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Weapon ammo:", value=b)
+
+        if item.startswith('reload'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Reload time:", value=b)
+
+        if item.startswith('damage'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Weapon damage:", value=b)
+
+        if item.startswith('numofsmallies'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Number of pellets:", value=b)
+
+        if item.startswith('maxdamage'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Max damage potential:", value=b)
+
+        if item.startswith('falloffrange'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Weapon falloff range:", value=b)
+
+        if item.startswith('firerate'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Firerate:", value=b)
+
+        if item.startswith('isfalloff'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Weapon has falloff:", value=b, inline=True)
+
+        if item.startswith('isheadshot'):
+            try:
+                a, b = item.split('=')
+            except ValueError:
+                continue
+            embed.add_field(name="Weapon can headshot:", value=b, inline=True)
+
+    return embed
+
 
 @client.event
 async def on_ready():
@@ -41,10 +143,10 @@ async def on_message(message):
         await client.edit_message(tmp, 'You have {} messages.'.format(counter))
 
     elif message.content.lower().startswith('wh!hash'):
-        messageString = message.content
+        message_string = message.content
         error = False
         try:
-            a, b = messageString.split(' ')
+            a, b = message_string.split(' ')
         except ValueError:
             await client.send_message(message.channel, 'Please input string to be hashed as first parameter')
             error = True
@@ -88,10 +190,10 @@ async def on_message(message):
 
     elif message.content.lower().startswith('wh!abilityinfo'):
 
-        messageString = message.content
+        message_string = message.content
         error = False
         try:
-            a, b = messageString.split(' ')
+            a, b = message_string.split(' ')
         except ValueError:
             await client.send_message(message.channel, 'Please input string to be searched as first parameter')
             error = True
@@ -103,7 +205,7 @@ async def on_message(message):
 
             title = b
 
-            paramsAbility = {
+            params_ability = {
                 'action': 'query',
                 'titles': title,
                 'prop': 'revisions',
@@ -111,7 +213,7 @@ async def on_message(message):
                 'format': 'json'
             }
 
-            r = s.get(url=url, params=paramsAbility)
+            r = s.get(url=url, params=params_ability)
             data = r.json()
 
             error = False
@@ -133,9 +235,7 @@ async def on_message(message):
                     a_list.pop()
                     a_list.pop()
 
-                    b_list = None
-
-                    await client.send_message(message.channel, 'Somewhat formatted response:')
+                    b_list = []
 
                     for item in a_list:
                         item = item.replace('|', ' ')
@@ -143,7 +243,7 @@ async def on_message(message):
                         item = item.replace('}', '')
                         item = item.replace('Texttip', '')
                         if item is not None and item != '':
-                            b_list.append(item)
+                            b_list.append(item[2:])
 
                     image_name = search_image_name(b_list)
 
@@ -156,7 +256,7 @@ async def on_message(message):
                             'action': 'query',
                             'list': 'allimages',
                             'ailimit': '1',
-                            'aifrom': x,
+                            'aifrom': image_name,
                             'aiprop': 'url',
                             'format': 'json'
                         }
@@ -164,7 +264,15 @@ async def on_message(message):
                         r = s.get(url=url, params=params_image)
                         image_data = r.json()
 
-                        print(image_data)
+                        try:
+                            filtered_data = image_data['query']['allimages'][0]['url']
+                            image_url = str(filtered_data)
+                        except KeyError:
+                            image_url = None
+
+                        built_embed = build_embed(b_list, image_url)
+
+                        await client.send_message(message.channel, embed=built_embed)
 
                 except ValueError:
                     await client.send_message(message.channel,
