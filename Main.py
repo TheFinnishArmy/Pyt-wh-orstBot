@@ -279,24 +279,6 @@ async def on_message(message):
                                               'Couldn\'t find a page with an ability description by that '
                                               'name. (All names are case-sensitive)')
 
-    elif message.content.lower().startswith('wh!eval'):
-        await client.send_message(message.channel, 'Currently not working, @ my creator if you really want it.')
-        '''
-        secret = 'TestSecret'
-        nonce = uuid.uuid4().hex
-        await client.send_message(message.channel,
-                                  'Please calculate the hash of the secret and nonce: \n {} \n You have 30 seconds'
-                                  .format(nonce))
-        msg = await client.wait_for_message(author=message.author, timeout=30)
-        if msg is not None:
-            if msg is hashlib.sha3_512(secret.encode('utf-8') + nonce.encode('utf-8')).hexdigest():
-                await client.send_message(message.channel, 'You would\'ve gotten eval, it\'s not implemented though.')
-            else:
-                await client.send_message(message.channel, 'You sent an invalid hash or you timed out.')
-        else:
-            await client.send_message(message.channel, 'You sent an invalid hash or you timed out.')
-        '''
-
     elif message.content.lower().startswith('wh!shutdown') or message.content.startswith('wh!stop'):
         await client.send_message(message.channel, 'Shutting down')
         await client.logout()
