@@ -21,7 +21,7 @@ def search_image_name(b_list):
     return None
 
 
-def build_embed(json_list, image_url):
+def build_embed(json_list, image_url=None):
     title_string = ''
     description_string = ''
 
@@ -39,12 +39,17 @@ def build_embed(json_list, image_url):
                 continue
             description_string += b
 
-    embed = discord.Embed(title=title_string, description=description_string)
+    if description_string != '':
+        embed = discord.Embed(title=title_string, description=description_string)
+    else:
+        embed = discord.Embed(title=title_string)
 
     if image_url is not None and image_url is not '':
         embed.set_thumbnail(url=image_url)
 
     for item in json_list:
+        print(item)
+
         if item.startswith('image'):
             continue
         elif item.startswith("name"):
@@ -171,282 +176,6 @@ def build_embed(json_list, image_url):
     return embed
 
 
-def build_prim_embed(json_list):
-    prim_title_string = ''
-
-    for item in json_list:
-        if item.startswith('primname'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_title_string += b
-
-    prim_embed = discord.Embed(title=prim_title_string)
-
-    for item in json_list:
-        if item.startswith("primname"):
-            continue
-        elif item.startswith('primtype'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Weapon type:", value=b)
-
-        elif item.startswith('primammo'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Weapon ammo:", value=b)
-
-        elif item.startswith('primreload'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Reload time:", value=b)
-
-        elif item.startswith('primdamage'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Weapon damage:", value=b)
-
-        elif item.startswith('numofsmallies'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Number of pellets:", value=b)
-
-        elif item.startswith('maxdamage'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Max damage potential:", value=b)
-
-        elif item.startswith('falloffrange'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Weapon falloff range:", value=b)
-
-        elif item.startswith('firerate'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Firerate:", value=b)
-
-        elif item.startswith('isfalloff'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Weapon has falloff:", value=b, inline=True)
-
-        elif item.startswith('isheadshot'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Weapon can headshot:", value=b, inline=True)
-
-        elif item.startswith('heal'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Healing rate:", value=b, inline=True)
-
-        elif item.startswith('range'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Range:", value=b)
-
-        elif item.startswith('radius'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Radius:", value=b)
-
-        elif item.startswith('effect'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Effect:", value=b)
-
-        elif item.startswith('duration'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Duration:", value=b)
-
-        elif item.startswith('cooldown'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Cooldown:", value=b)
-
-        elif item.startswith('casttime'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            prim_embed.add_field(name="Cast time:", value=b)
-
-    return prim_embed
-
-
-def build_secd_embed(json_list):
-    secd_title_string = ''
-
-    for item in json_list:
-        if item.startswith('secdname'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_title_string += b
-
-    secd_embed = discord.Embed(title=secd_title_string)
-
-    for item in json_list:
-        if item.startswith("secdname"):
-            continue
-        elif item.startswith('secdtype'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Weapon type:", value=b)
-
-        elif item.startswith('secdammo'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Weapon ammo:", value=b)
-
-        elif item.startswith('secdreload'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Reload time:", value=b)
-
-        elif item.startswith('secddamage'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Weapon damage:", value=b)
-
-        elif item.startswith('secdnumofsmallies'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Number of pellets:", value=b)
-
-        elif item.startswith('secdmaxdamage'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Max damage potential:", value=b)
-
-        elif item.startswith('secdfalloffrange'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Weapon falloff range:", value=b)
-
-        elif item.startswith('secdfirerate'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Firerate:", value=b)
-
-        elif item.startswith('secdisfalloff'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Weapon has falloff:", value=b, inline=True)
-
-        elif item.startswith('secdisheadshot'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Weapon can headshot:", value=b, inline=True)
-
-        elif item.startswith('secdheal'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Healing rate:", value=b, inline=True)
-
-        elif item.startswith('secdrange'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Range:", value=b)
-
-        elif item.startswith('secdradius'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Radius:", value=b)
-
-        elif item.startswith('secdeffect'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Effect:", value=b)
-
-        elif item.startswith('secdduration'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Duration:", value=b)
-
-        elif item.startswith('secdcooldown'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Cooldown:", value=b)
-
-        elif item.startswith('secdcasttime'):
-            try:
-                a, b = item.split('=')
-            except ValueError:
-                continue
-            secd_embed.add_field(name="Cast time:", value=b)
-
-    return secd_embed
-
-
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -561,7 +290,9 @@ async def on_message(message):
                     a_list.pop()
                     a_list.pop()
 
-                    b_list = []
+                    prim_list = []
+                    secd_list = []
+                    main_list = []
 
                     for item in a_list:
 
@@ -578,11 +309,25 @@ async def on_message(message):
                         regex = r'\<.*?\>'
 
                         item_regexed = re.sub(regex, '', item)
+                        item_regexed = item_regexed[2:]
 
                         if item_regexed is not None and item_regexed != '':
-                            b_list.append(item_regexed[2:])
 
-                    image_name = search_image_name(b_list)
+                            if item_regexed.startswith('image') or item_regexed.startswith('name')\
+                                    or item_regexed.startswith('description'):
+
+                                main_list.append(item_regexed)
+
+                            elif item_regexed.startswith('secd'):
+                                item_regexed = item_regexed.replace('secd', '')
+                                secd_list.append(item_regexed)
+
+                            else:
+                                item_regexed = item_regexed.replace('prim', '')
+                                prim_list.append(item_regexed)
+
+                    image_url = None
+                    image_name = search_image_name(main_list)
 
                     if image_name is not None and image_name is not '':
                         s = requests.Session()
@@ -607,50 +352,15 @@ async def on_message(message):
                         except KeyError:
                             image_url = None
 
-                        prim = False
-                        secd = False
+                    main_embed = build_embed(main_list, image_url)
+                    prim_embed = build_embed(prim_list)
+                    if secd_list:
+                        secd_embed = build_embed(secd_list)
 
-                        for item in b_list:
-                            if item.startswith("prim"):
-                                prim = True
-                            elif item.startswith("secd"):
-                                secd = True
-
-                        if prim and secd:
-                            prim_list = []
-                            secd_list = []
-                            main_list = []
-
-                            for item in b_list:
-                                if not (not item.startswith('image') and not
-                                        item.startswith('name')) or item.startswith('description'):
-                                    main_list.append(item)
-
-                                elif item.startswith('secd'):
-                                    secd_list.append(item)
-
-                                elif item is not None and item != '':
-                                    prim_list.append(item)
-
-                            main_embed = build_embed(main_list, image_url)
-                            prim_embed = build_prim_embed(prim_list)
-                            secd_embed = build_secd_embed(secd_list)
-
-                            await client.send_message(message.channel, embed=main_embed)
-                            await client.send_message(message.channel, embed=prim_embed)
-                            await client.send_message(message.channel, embed=secd_embed)
-                        else:
-                            c_list = []
-
-                            for item in b_list:
-                                item = item.replace('prim', '')
-                                item = item.replace('secd', '')
-                                if item is not None and item != '':
-                                    c_list.append(item)
-
-                            built_embed = build_embed(b_list, image_url)
-
-                            await client.send_message(message.channel, embed=built_embed)
+                    await client.send_message(message.channel, embed=main_embed)
+                    await client.send_message(message.channel, embed=prim_embed)
+                    if secd_list:
+                        await client.send_message(message.channel, embed=secd_embed)
 
                 except ValueError:
                     await client.send_message(message.channel,
