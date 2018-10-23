@@ -1,7 +1,6 @@
 **TODO** 
 -
 - Integrate Overwatch wiki (Wikia Api & Discord Embeds)
-    - Add filters for supporting abilities
-    - Sometimes doesn't find a page that exists, diagnose.
-    - Implement support for secondary fire modes
+    - Sometimes doesn't find a page that exists, diagnose. (Specifically Anas Biotic Rifle)
+    - Merge embed generators into one! Should be easy enough.
 - Donald Trump Tweet Generator
