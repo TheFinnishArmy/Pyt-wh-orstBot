@@ -154,19 +154,19 @@ def build_embed(json_list, image_url):
                 continue
             embed.add_field(name="Duration:", value=b)
 
-        elif item.startswith('cool down'):
+        elif item.startswith('cooldown'):
             try:
                 a, b = item.split('=')
             except ValueError:
                 continue
             embed.add_field(name="Cooldown:", value=b)
 
-        elif item.startswith('cast time'):
+        elif item.startswith('casttime'):
             try:
                 a, b = item.split('=')
             except ValueError:
                 continue
-            embed.add_field(name="Cast time:", value=b)
+            embed.add_field(name="Casttime:", value=b)
 
     return embed
 
@@ -292,14 +292,14 @@ def build_prim_embed(json_list):
                 continue
             prim_embed.add_field(name="Duration:", value=b)
 
-        elif item.startswith('cool down'):
+        elif item.startswith('cooldown'):
             try:
                 a, b = item.split('=')
             except ValueError:
                 continue
             prim_embed.add_field(name="Cooldown:", value=b)
 
-        elif item.startswith('cast time'):
+        elif item.startswith('casttime'):
             try:
                 a, b = item.split('=')
             except ValueError:
@@ -430,14 +430,14 @@ def build_secd_embed(json_list):
                 continue
             secd_embed.add_field(name="Duration:", value=b)
 
-        elif item.startswith('secdcool down'):
+        elif item.startswith('secdcooldown'):
             try:
                 a, b = item.split('=')
             except ValueError:
                 continue
             secd_embed.add_field(name="Cooldown:", value=b)
 
-        elif item.startswith('secdcast time'):
+        elif item.startswith('secdcasttime'):
             try:
                 a, b = item.split('=')
             except ValueError:
@@ -555,8 +555,6 @@ async def on_message(message):
             if not error:
                 try:
                     a, b = filtered_data_string.split('</onlyinclude>')
-
-                    print("Got past split")
 
                     a_list = a.split('\n')
                     a_list.pop(0)
