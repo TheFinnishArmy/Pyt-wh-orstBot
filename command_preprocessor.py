@@ -2,11 +2,11 @@ import command_processor as command
 
 
 async def process(message, client):
-    if message.author is client.id:
+    if message.author is client.user.id:
         return
-    if message.content.startswith('wh!'):
+    if not message.content.startswith('wh!'):
         return
 
     message_string = message.content.lower()
 
-    command.process(message, message_string, client)
+    await command.process(message, message_string, client)
