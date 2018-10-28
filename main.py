@@ -1,5 +1,5 @@
 import discord
-import commandPreprocessor
+import command_preprocessor
 
 client = discord.Client()
 
@@ -17,8 +17,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    await commandPreprocessor.process(message, client)
-
+    await command_preprocessor.process(message, client)
 
 
 client.run('NTAyNDEyNTI2OTkxMTc5Nzg2.DqnjxA.tYxjA-AGeAg7XmuhYg-Ov6jA5Zk')
