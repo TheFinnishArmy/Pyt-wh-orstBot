@@ -1,9 +1,8 @@
 import discord
-import asyncio
 import hashlib
 
 import ability_info
-import  dailyprogrammer_commands as dp
+from dailyprogrammer_challenges import dailyprogrammer_commands as dp
 
 
 async def process(message, message_string, client):
