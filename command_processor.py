@@ -16,15 +16,15 @@ async def process(message, message_string, client):
         await client.edit_message(tmp, 'You have {} messages.'.format(counter))
 
     elif message_string.startswith('wh!hash'):
-        error = False
-        try:
-            a, b = message_string.split(' ')
-        except ValueError:
+        message_string = message_string.replace('wh!hash', '')
+        message_string = message_string.strip()
+
+        if message_string is not '':
+            await client.send_message(message.channel, 'SHA3-512 Hash of {}:'.format(message_string))
+            await client.send_message(message.channel, hashlib.sha3_512(message_string.encode('utf-8')).hexdigest())
+
+        else:
             await client.send_message(message.channel, 'Please input string to be hashed as first parameter')
-            error = True
-        if not error:
-            await client.send_message(message.channel, 'SHA3-512 Hash of {}:'.format(b))
-            await client.send_message(message.channel, hashlib.sha3_512(b.encode('utf-8')).hexdigest())
 
     elif message_string.startswith('wh!changePresence'):
         error = False
