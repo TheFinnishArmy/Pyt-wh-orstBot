@@ -1,2 +1,2 @@
-def main():
+def main(message, message_string, client):
     return
