@@ -17,12 +17,15 @@ def search_image_name(b_list):
 
 
 def build(message_string):
-    try:
-        a, b = message_string.split(' ')
-    except ValueError:
+    message_string = message_string.replace('wh!abilityinfo', '')
+    message_string = message_string.strip()
+    message_string = message_string.replace(' ', '_')
+    message_string = message_string.title()
+
+    if message_string is '':
         raise ValueError('Couldn\'t split message')
 
-    b = b.title()
+    b = message_string
 
     s = requests.Session()
 
