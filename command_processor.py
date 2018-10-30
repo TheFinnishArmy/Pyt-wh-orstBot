@@ -6,7 +6,6 @@ from dailyprogrammer_challenges import dailyprogrammer_commands as dp
 
 
 async def process(message, message_string, client):
-
     if message_string.startswith('wh!count'):
         counter = 0
         tmp = await client.send_message(message.channel, 'Calculating messages...')
@@ -44,13 +43,13 @@ async def process(message, message_string, client):
                 c_int = int(c)
             except ValueError:
                 await client.send_message(message.channel,
-                                    'Please enter a int as the second parameter, current entered has been '
-                                    'discarded as it couldn\'t be converted')
-                error = True
+                                          'Please enter a int as the second parameter, current entered has been '
+                                          'discarded as it couldn\'t be converted')
+                c_int = None
             except TypeError:
-                error = True
+                c_int = None
 
-            if not error:
+            if c_int is not None:
                 test_game = discord.Game(name=b, type=c_int)
                 await client.change_presence(game=test_game)
                 await client.send_message(message.channel, 'Changed to status: {0} \n and game: {1}'.format(c, b))
