@@ -66,15 +66,6 @@ async def process(message, message_string, client):
         try:
             embed_pack = ability_info.build(message_string)
 
-            main_embed = embed_pack['main_embed']
-            prim_embed = embed_pack['prim_embed']
-            secd_embed = embed_pack['secd_embed']
-
-            await client.send_message(message.channel, embed=main_embed)
-            await client.send_message(message.channel, embed=prim_embed)
-            if secd_embed is not None:
-                await client.send_message(message.channel, embed=secd_embed)
-
         except ValueError:
             await client.send_message(message.channel, 'Please input string to be searched as first parameter')
         except AttributeError:
@@ -84,6 +75,16 @@ async def process(message, message_string, client):
         except KeyError:
             await client.send_message(message.channel, 'Couldn\'t find a wikipage by that name. (All names are '
                                                        'case-sensitive)')
+
+        else:
+            main_embed = embed_pack['main_embed']
+            prim_embed = embed_pack['prim_embed']
+            secd_embed = embed_pack['secd_embed']
+
+            await client.send_message(message.channel, embed=main_embed)
+            await client.send_message(message.channel, embed=prim_embed)
+            if secd_embed is not None:
+                await client.send_message(message.channel, embed=secd_embed)
 
     elif message_string.startswith('wh!shutdown') or message_string.startswith('wh!stop'):
         await client.send_message(message.channel, 'Shutting down')
