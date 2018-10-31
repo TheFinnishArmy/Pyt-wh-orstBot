@@ -1,5 +1,21 @@
 import discord
 import command_preprocessor
+import json
+
+try:
+    with open('config.json') as json_data_file:
+        data = json.load(json_data_file)
+except FileNotFoundError:
+    print('You have to copy the example_config.json to a file named config.json and place in the required details.')
+    exit(1)
+
+try:
+    token = str(data["token"])
+    # OwnerID = data["OwnerID"] #Unused for the moment.
+except KeyError:
+    print("config.json is malformed please fix the file structure.")
+    exit(1)
+
 
 client = discord.Client()
 
@@ -20,4 +36,4 @@ async def on_message(message):
     await command_preprocessor.process(message, client)
 
 
-client.run('NTAyNDEyNTI2OTkxMTc5Nzg2.DqnjxA.tYxjA-AGeAg7XmuhYg-Ov6jA5Zk')
+client.run(token)
