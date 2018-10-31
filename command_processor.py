@@ -2,7 +2,6 @@ import discord
 import hashlib
 
 import ability_info
-from dailyprogrammer_challenges import dailyprogrammer_commands as dp
 
 
 async def process(message, message_string, client):
@@ -38,7 +37,6 @@ async def process(message, message_string, client):
             error = True
 
         if not error:
-            error = False
             try:
                 c_int = int(c)
             except ValueError:
@@ -57,9 +55,6 @@ async def process(message, message_string, client):
                 test_game = discord.Game(name=b)
                 await client.change_presence(game=test_game)
                 await client.send_message(message.channel, 'Changed to game: {}'.format(b))
-
-    elif message_string.startswith('wh!dp'):
-        await dp.main(message, message_string, client)
 
     elif message_string.startswith('wh!abilityinfo'):
         try:
