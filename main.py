@@ -11,7 +11,7 @@ except FileNotFoundError:
 
 try:
     token = str(data["token"])
-    # OwnerID = data["OwnerID"] #Unused for the moment.
+    owner_id = str(data["OwnerID"])
 except KeyError:
     print("config.json is malformed please fix the file structure.")
     exit(1)
@@ -33,7 +33,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    await command_preprocessor.process(message, client)
+    await command_preprocessor.process(message, owner_id, client)
 
 
 client.run(token)

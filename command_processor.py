@@ -4,7 +4,7 @@ import hashlib
 import ability_info
 
 
-async def process(message, message_string, client):
+async def process(message, message_string, owner_id, client):
     if message_string.startswith('wh!count'):
         counter = 0
         tmp = await client.send_message(message.channel, 'Calculating messages...')
@@ -24,37 +24,28 @@ async def process(message, message_string, client):
         else:
             await client.send_message(message.channel, 'Please input string to be hashed as first parameter')
 
-    elif message_string.startswith('wh!changePresence'):
-        error = False
+    elif message_string.startswith('wh!changepresence'):
+        if message.author.id != owner_id:
+            await client.send_message(message.channel, 'This command is only available to the owner of the bot.')
+            return
+
         a, b, c = None, None, None
+        message_string = message_string.replace('wh!changepresence', '')
+        message_string = message_string.strip()
         try:
-            try:
-                a, b, c = message_string.split(' ')
-            except ValueError:
-                a, b = message_string.split(' ')
+            presence_number = int(message_string[0:1])
         except ValueError:
-            await client.send_message(message.channel, 'Please input string to be used as the game')
-            error = True
+            await client.send_message(message.channel, 'Please enter a number to dictate which presence flavour you '
+                                                       'would like. \n \n'
 
-        if not error:
-            try:
-                c_int = int(c)
-            except ValueError:
-                await client.send_message(message.channel,
-                                          'Please enter a int as the second parameter, current entered has been '
-                                          'discarded as it couldn\'t be converted')
-                c_int = None
-            except TypeError:
-                c_int = None
+                                                       'If you\'re not sure; "0" is always a good option')
+            return
 
-            if c_int is not None:
-                test_game = discord.Game(name=b, type=c_int)
-                await client.change_presence(game=test_game)
-                await client.send_message(message.channel, 'Changed to status: {0} \n and game: {1}'.format(c, b))
-            else:
-                test_game = discord.Game(name=b)
-                await client.change_presence(game=test_game)
-                await client.send_message(message.channel, 'Changed to game: {}'.format(b))
+        presence_title = message_string.title()[1:]
+
+        test_game = discord.Game(name=presence_title, type=presence_number)
+        await client.change_presence(game=test_game)
+        await client.send_message(message.channel, 'Changed presence to: {0}'.format(presence_title))
 
     elif message_string.startswith('wh!abilityinfo'):
         try:
@@ -81,5 +72,9 @@ async def process(message, message_string, client):
                 await client.send_message(message.channel, embed=secd_embed)
 
     elif message_string.startswith('wh!shutdown') or message_string.startswith('wh!stop'):
+        if message.author.id != owner_id:
+            await client.send_message(message.channel, 'This command is only available to the owner of the bot.')
+            return
+
         await client.send_message(message.channel, 'Shutting down')
         await client.logout()
