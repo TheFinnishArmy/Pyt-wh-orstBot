@@ -52,12 +52,8 @@ def build(message_string):
         raise KeyError()
 
     try:
-        try:
-            split_list = filtered_data_string.split('</onlyinclude>')
-            a = split_list[0]
-        except ValueError:
-            split_list = filtered_data_string.split('<\/onlyinclude>')
-            a = split_list[0]
+        split_list = filtered_data_string.split('</onlyinclude>')
+        a = split_list[0]
 
     except ValueError:
         raise AttributeError('Couldn\'t find ability template')
