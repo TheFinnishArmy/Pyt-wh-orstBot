@@ -4,6 +4,15 @@ import hashlib
 import ability_info
 
 
+def permission_check(message):
+    truth_factor = message.channel.server.get_member(message.author.id).server_permissions.kick_members
+    if message.author != message.channel.server.owner:
+        if not truth_factor:
+            return False
+
+    return True
+
+
 async def process(message, message_string, owner_id, client):
     if message_string.startswith('wh!count'):
         counter = 0
@@ -70,6 +79,12 @@ async def process(message, message_string, owner_id, client):
             await client.send_message(message.channel, embed=prim_embed)
             if secd_embed is not None:
                 await client.send_message(message.channel, embed=secd_embed)
+
+    elif message_string.startswith('wh!kick'):
+        if permission_check(message):
+            await client.send_message(message.channel, 'Would\'ve resulted in a successful kick')
+        else:
+            await client.send_message(message.channel, 'Wouldn\'t have resulted in a successful kick')
 
     elif message_string.startswith('wh!shutdown') or message_string.startswith('wh!stop'):
         if message.author.id != owner_id:
