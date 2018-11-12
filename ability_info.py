@@ -83,22 +83,22 @@ def build(message_string):
             regex = r'\<.*?\>'
 
             item_regexed = re.sub(regex, '', item)
-            item_regexed = item_regexed[2:]
+            item_regexed_stripped = item_regexed.strip()
 
-            if item_regexed is not None and item_regexed != '':
+            if item_regexed_stripped is not None and item_regexed_stripped != '':
 
-                if item_regexed.startswith('image') or item_regexed.startswith('name') \
-                        or item_regexed.startswith('description'):
+                if item_regexed_stripped.startswith('image') or item_regexed_stripped.startswith('name') \
+                        or item_regexed_stripped.startswith('description'):
 
-                    main_list.append(item_regexed)
+                    main_list.append(item_regexed_stripped)
 
-                elif item_regexed.startswith('secd'):
-                    item_regexed = item_regexed.replace('secd', '')
-                    secd_list.append(item_regexed)
+                elif item_regexed_stripped.startswith('secd'):
+                    item_regexed_stripped = item_regexed_stripped.replace('secd', '')
+                    secd_list.append(item_regexed_stripped)
 
                 else:
-                    item_regexed = item_regexed.replace('prim', '')
-                    prim_list.append(item_regexed)
+                    item_regexed_stripped = item_regexed_stripped.replace('prim', '')
+                    prim_list.append(item_regexed_stripped)
 
         image_url = None
         image_name = search_image_name(main_list)
