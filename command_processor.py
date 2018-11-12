@@ -13,7 +13,7 @@ def permission_check(message):
     return True
 
 
-async def process(message, message_string, owner_id, client):
+async def process(message, message_string, is_owner, client):
     if message_string.startswith('wh!count'):
         counter = 0
         tmp = await client.send_message(message.channel, 'Calculating messages...')
@@ -34,7 +34,7 @@ async def process(message, message_string, owner_id, client):
             await client.send_message(message.channel, 'Please input string to be hashed as first parameter')
 
     elif message_string.startswith('wh!changepresence'):
-        if message.author.id != owner_id:
+        if not is_owner:
             await client.send_message(message.channel, 'This command is only available to the owner of the bot.')
             return
 
@@ -87,7 +87,7 @@ async def process(message, message_string, owner_id, client):
             await client.send_message(message.channel, 'Wouldn\'t have resulted in a successful kick')
 
     elif message_string.startswith('wh!shutdown') or message_string.startswith('wh!stop'):
-        if message.author.id != owner_id:
+        if not is_owner:
             await client.send_message(message.channel, 'This command is only available to the owner of the bot.')
             return
 

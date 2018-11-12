@@ -33,7 +33,11 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    await command_preprocessor.process(message, owner_id, client)
+    is_owner = False
+    if message.author.id == owner_id:
+        is_owner = True
+
+    await command_preprocessor.process(message, is_owner, client)
 
 
 client.run(token)
