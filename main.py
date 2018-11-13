@@ -13,7 +13,7 @@ try:
     token = str(data["token"])
     owner_id = str(data["OwnerID"])
 except KeyError:
-    print("config.json is malformed please fix the file structure.")
+    print("config.json is malformed please fix the file structure or create it from scratch.")
     exit(1)
 
 

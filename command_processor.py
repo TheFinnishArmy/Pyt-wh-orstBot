@@ -44,7 +44,7 @@ async def process(message, message_string, is_owner, client):
         try:
             presence_number = int(message_string[0:1])
         except ValueError:
-            await client.send_message(message.channel, 'Please enter a number to dictate which presence flavour you '
+            await client.send_message(message.channel, 'Please enter a number to dictate which presence "flavour" you '
                                                        'would like. \n \n'
 
                                                        'If you\'re not sure; "0" is always a good option')

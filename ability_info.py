@@ -20,6 +20,8 @@ def build(message_string):
     message_string = message_string.replace('wh!abilityinfo', '')
     message_string = message_string.strip()
     message_string = message_string.replace(' ', '_')
+    message_string = message_string.replace('"', '')
+    message_string = message_string.replace('\'', '')
     message_string = message_string.title()
 
     if message_string is '':
