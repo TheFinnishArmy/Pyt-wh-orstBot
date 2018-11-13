@@ -37,12 +37,12 @@ async def colour_me(message, message_string, client):
 
         if role is None:
             role_pos = author.top_role.position + 1
-            new_role = await client.create_role(server=current_server, colour=colour, name= 'Colour #{}'.format(message_string))
+            new_role = await client.create_role(server=current_server, colour=colour, name='Colour #{}'.format(message_string))
             await client.move_role(server=current_server, role=new_role, position=role_pos)
             await client.add_roles(author, new_role)
 
         else:
-            await client.edit_role(server=current_server, role=role, colour=colour, name= 'Colour #{}'.format(message_string))
+            await client.edit_role(server=current_server, role=role, colour=colour, name='Colour #{}'.format(message_string))
             await client.add_roles(author, role)
 
     else:
@@ -88,7 +88,6 @@ async def process(message, message_string, is_owner, client):
             await client.send_message(message.channel, 'This command is only available to the owner of the bot.')
             return
 
-        a, b, c = None, None, None
         message_string = message_string.replace('wh!changepresence', '')
         message_string = message_string.strip()
         try:
@@ -135,6 +134,32 @@ async def process(message, message_string, is_owner, client):
             await client.send_message(message.channel, 'Would\'ve resulted in a successful kick')
         else:
             await client.send_message(message.channel, 'Wouldn\'t have resulted in a successful kick')
+
+    elif message_string.startswith('wh!poll'):
+        message_string = message_string.replace('wh!poll', '')
+        message_string = message_string.strip()
+        message_string_list = message_string.split('" "')
+
+        whitespace_regex = r'\s+'
+        for_loop_index = 0
+        non_whitespace_list = []
+
+        for item in message_string_list:
+            print(item)
+            print(for_loop_index)
+            for_loop_index += 1
+
+            item = item.replace('"', '')
+
+            if re.match(whitespace_regex, item) or item is "":
+                print("poped previous item")
+                for_loop_index -= 1
+                continue
+
+            non_whitespace_list.append(item)
+
+        for item in non_whitespace_list:
+            print(item)
 
     elif message_string.startswith('wh!shutdown') or message_string.startswith('wh!stop'):
         if not is_owner:
