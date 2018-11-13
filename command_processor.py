@@ -1,5 +1,6 @@
 import discord
 import hashlib
+import re
 
 import ability_info
 
@@ -13,6 +14,47 @@ def permission_check(message):
     return True
 
 
+async def colour_me(message, message_string, client):
+    current_server = message.channel.server
+    author = current_server.get_member(message.author.id)
+
+    role_list = author.roles
+    role_regex = r'Colou?r #[0-F]{6}'
+    message_regex = r'^[0-F]{6}$'
+
+    message_string = message_string.replace('#', '')
+    message_string = message_string.strip()
+    message_string = message_string.upper()
+
+    if re.match(message_regex, message_string):
+        colour = discord.Colour(int(message_string, 16))
+
+        role = None
+        for role_candidate in role_list:
+            if re.match(role_regex, role_candidate.name):
+                role = role_candidate
+                break
+
+        if role is None:
+            role_pos = author.top_role.position + 1
+            new_role = await client.create_role(server=current_server, colour=colour, name= 'Colour #{}'.format(message_string))
+            await client.move_role(server=current_server, role=new_role, position=role_pos)
+            await client.add_roles(author, new_role)
+
+        else:
+            await client.edit_role(server=current_server, role=role, colour=colour, name= 'Colour #{}'.format(message_string))
+            await client.add_roles(author, role)
+
+    else:
+        await  client.send_message(message.channel, 'The command requires a hexadecimal colour entered in:\n '
+                                                    'ex. #008ad0')
+        return
+
+    await client.send_message(message.channel, 'Your new colour has been added.')
+
+    return
+
+
 async def process(message, message_string, is_owner, client):
     if message_string.startswith('wh!count'):
         counter = 0
@@ -21,6 +63,14 @@ async def process(message, message_string, is_owner, client):
             if log.author == message.author:
                 counter += 1
         await client.edit_message(tmp, 'You have {} messages.'.format(counter))
+
+    elif message_string.startswith('wh!colourme'):
+        message_string = message_string.replace('wh!colourme', '')
+        await colour_me(message, message_string, client)
+
+    elif message_string.startswith('wh!colorme'):
+        message_string = message_string.replace('wh!colorme', '')
+        await colour_me(message, message_string, client)
 
     elif message_string.startswith('wh!hash'):
         message_string = message_string.replace('wh!hash', '')

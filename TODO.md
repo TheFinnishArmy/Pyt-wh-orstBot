@@ -15,8 +15,5 @@
 - Youtube notifications etc. (So like twitch and ??? grouped with that)
 
 *Another set of potentially new features, from another friend:*
--
-- wh!colourMe command, to assign colour roles to people without ManageRoles permission
-    - Add an alias wh!colorMe for it.
-    
+-    
 - Poll support
