@@ -10,6 +10,8 @@ config.json
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/**/misc.xml
+.idea/**/untitled.xml
 
 # Generated files
 .idea/**/contentModel.xml
