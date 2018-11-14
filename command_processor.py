@@ -141,25 +141,68 @@ async def process(message, message_string, is_owner, client):
         message_string_list = message_string.split('" "')
 
         whitespace_regex = r'\s+'
-        for_loop_index = 0
         non_whitespace_list = []
 
         for item in message_string_list:
-            print(item)
-            print(for_loop_index)
-            for_loop_index += 1
-
             item = item.replace('"', '')
 
             if re.match(whitespace_regex, item) or item is "":
-                print("poped previous item")
-                for_loop_index -= 1
                 continue
 
             non_whitespace_list.append(item)
 
-        for item in non_whitespace_list:
-            print(item)
+        if len(non_whitespace_list) == 1:
+            yes_emoji = None
+            no_emoji = None
+
+            server_emoji = message.channel.server.emojis
+
+            for candidate_emoji in server_emoji:
+                if candidate_emoji.name == 'yes':
+                    yes_emoji = candidate_emoji
+                elif candidate_emoji.name == 'no':
+                    no_emoji = candidate_emoji
+
+            if yes_emoji is None or no_emoji is None:
+                await client.send_message(message.channel, 'This server hasn\'t setup the yes and no reaction emojis.')
+                return
+
+            embed = discord.Embed(description=non_whitespace_list[0])
+            sent_message = await client.send_message(message.channel, embed=embed)
+
+            await client.add_reaction(sent_message, yes_emoji)
+            await client.add_reaction(sent_message, no_emoji)
+
+        elif 10 >= len(non_whitespace_list) > 0:
+            emoji_list = [
+                'one',
+                'two',
+                'three',
+                'four',
+                'five',
+                'six',
+                'seven',
+                'eight',
+                'nine',
+                'keycap_ten'
+            ]
+
+            index = 0
+            embed = discord.Embed(description=non_whitespace_list[0])
+
+            for _ in non_whitespace_list:
+                index += 1
+                embed.add_field(name='Option {}:'.format(index), value=non_whitespace_list[index])
+
+            sent_message = await client.send_message(message.channel, embed=embed)
+
+            i = 0
+            while i <= index:
+                await client.add_reaction(sent_message, emoji_list[i])
+
+        else:
+            await client.send_message(message.channel, 'This command can be used with 1 question or'
+                                                       ' 1 title and 2 to 7 options.')
 
     elif message_string.startswith('wh!shutdown') or message_string.startswith('wh!stop'):
         if not is_owner:
