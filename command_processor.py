@@ -55,7 +55,7 @@ async def colour_me(message, message_string, client):
     return
 
 
-async def process(message, message_string, is_owner, client):
+async def process(message: discord.Message, message_string: str, is_owner, client: discord.Client):
     if message_string.startswith('wh!count'):
         counter = 0
         tmp = await client.send_message(message.channel, 'Calculating messages...')
