@@ -10,6 +10,7 @@ async def process(message: discord.Message, is_owner, client: discord.Client):
     if message.channel.is_private:
         await client.send_message(message.channel, 'Please use this bot from a guild channel, many features depend on '
                                                    'it.')
+        return
 
     message_string = message.content.lower()
 
