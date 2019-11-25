@@ -1,4 +1,4 @@
-*There _was_ ideas of what to do*
+# *Here _were_ ideas of what to do*
 
 
 But now since I've begun porting this all into rust, most of the time will be in developing that.
