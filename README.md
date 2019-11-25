@@ -1,5 +1,5 @@
 # Pyt⟨wh⟩orstBot
-Just in case anyone cares: Not saying anything about python itself, just found a space in the name to express my horrendous coding skills.
+Just in case anyone cares: Not saying anything about python itself, just found a space in the name to express the horrendous way I've written the code back then.
 
 And if you for some god forsaken reason want to use this bot;
 
