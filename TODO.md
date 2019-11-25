@@ -1,19 +1,6 @@
-*TODO:*
--
-- Donald Trump Tweet Generator
+*There _was_ ideas of what to do*
+But now since I've begun porting this all into rust, most of the time will be in developing that.
+Firstly all the features I did complete here, and then I'll think of additions.
 
-- If someone has any additional ideas feel free to throw them at me on discord FinnishArmy#9973
-
-*New additions inspired by my friend:*
--
-- Administrative features
-
-- Some kind of feeds? Not sure what exactly he meant.
-
-  (Probably twitter or rss, let's try to implement both)
-  
-- Youtube notifications etc. (So like twitch and ??? grouped with that)
-
-*Another set of potentially new features, from another friend:*
--    
-- Poll support
+Just for compatibility or not, if you wanna contact me the ID has changed:
+FinnishArmy#1281
