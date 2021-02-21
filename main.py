@@ -27,14 +27,14 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-    test_game = discord.Game(name="my creators ramblings", type=2)
-    await client.change_presence(game=test_game)
+    test_game = discord.Activity(name="my creators ramblings", type=2)
+    await client.change_presence(activity=test_game)
 
 
 @client.event
 async def on_message(message):
     is_owner = False
-    if message.author.id == owner_id:
+    if str(message.author.id) == owner_id:
         is_owner = True
 
     await command_preprocessor.process(message, is_owner, client)

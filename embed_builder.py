@@ -24,7 +24,7 @@ def build_embed(json_list, image_url=None):
     else:
         embed = discord.Embed(title=title_string)
 
-    if image_url is not None and image_url is not '':
+    if image_url is not None and image_url != '':
         embed.set_thumbnail(url=image_url)
 
     for item in json_list:
